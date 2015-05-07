@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Model;
-import databeans.UserBean;
 
 @SuppressWarnings("serial")
 public class Controller extends HttpServlet {
@@ -18,7 +17,7 @@ public class Controller extends HttpServlet {
     public void init() throws ServletException {
         Model model = new Model(getServletConfig());
         
- //       Action.add(new TestAction(model));
+        Action.add(new ManageAction(model));
 
     }
 
@@ -28,6 +27,7 @@ public class Controller extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nextPage = performTheAction(request);
+        System.out.println(nextPage);
         sendToNextPage(nextPage,request,response);
     }
     
@@ -40,18 +40,12 @@ public class Controller extends HttpServlet {
     private String performTheAction(HttpServletRequest request) {
         HttpSession session     = request.getSession(true);
         String      servletPath = request.getServletPath();
-        UserBean        user = (UserBean) session.getAttribute("user");
         String      action = getActionName(servletPath);
+        System.out.println("servletPath: " + servletPath);
+        System.out.println("action: " + action);
 
         // System.out.println("servletPath="+servletPath+" requestURI="+request.getRequestURI()+"  user="+user);
-        if (action.equals("register.do") || action.equals("login.do")) {
-        	// Allow these actions without logging in
-			return Action.perform(action,request);
-        }
-        if (user == null) {
-        	// If the user hasn't logged in, direct him to the login page
-        	return Action.perform("newpage.do",request);
-        }
+        
       	// Let the logged in user run his chosen action
 		return Action.perform(action,request);
     }

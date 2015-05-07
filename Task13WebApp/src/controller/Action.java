@@ -21,17 +21,17 @@ public abstract class Action {
     private static Map<String,Action> hash = new HashMap<String,Action>();
 
     public static void add(Action a) {
-    	synchronized (hash) {
-    		hash.put(a.getName(),a);
-    	}
+    		synchronized (hash) {
+    			hash.put(a.getName(),a);
+    		}
     }
 
     public static String perform(String name,HttpServletRequest request) {
         Action a;
         synchronized (hash) {
-        	a = hash.get(name);
+        		a = hash.get(name);
         }
-        
+        System.out.println("a is null: " + a.getClass());
         if (a == null) return null;
         return a.perform(request);
     }
