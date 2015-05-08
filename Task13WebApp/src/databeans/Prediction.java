@@ -4,14 +4,21 @@ public class Prediction {
 	private String routeName;
 	private String routeId;
 	private String time;
+	private String busNumber;
+	private String lat;
+	private String lon;
 	
 	public Prediction() {
-		this("", "", "");
+		this("", "", "", "", "", "");
 	}
-	public Prediction(String routeId, String routeName, String time) {
+	public Prediction(String routeId, String routeName, String time, String busNumber,
+			String lat, String lon) {
 		this.routeName = routeName;
 		this.routeId = routeId;
 		this.time = time;
+		this.busNumber = busNumber;
+		this.lat = lat;
+		this.lon = lon;
 	}
 	
 	public String getRouteName() {
@@ -32,8 +39,26 @@ public class Prediction {
 	public void setTime(String time) {
 		this.time = time;
 	}
+	public String getBusNumber() {
+		return busNumber;
+	}
+	public void setBusNumber(String busNumber) {
+		this.busNumber = busNumber;
+	}
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+	public String getLon() {
+		return lon;
+	}
+	public void setLon(String lon) {
+		this.lon = lon;
+	}
 	
 	public String toString() {
-		return routeId + " ," + time; 
+		return routeId + " ," + time + ", " + lat + ", " + lon + "\n"; 
 	}
 }

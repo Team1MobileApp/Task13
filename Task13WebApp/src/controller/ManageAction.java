@@ -7,17 +7,24 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+
 import javax.servlet.http.HttpServletRequest;
+
 import sun.net.www.protocol.http.HttpURLConnection;
 import model.Model;
 import model.RouteDAO;
+
 import org.genericdao.RollbackException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
 import databeans.Prediction;
 import databeans.Route;
 
@@ -86,11 +93,13 @@ public class ManageAction extends Action {
 				String[] predictions = getTime(routeId, stopId);
 				if (predictions == null) continue;
 				String time = predictions[1];
-				System.out.println(time);
-				predictRes.add(new Prediction(routeId, route.getRouteName(), time));
-
+				String bus = predictions[2];
+				String[] pos = getPos(bus);
+				if (pos == null) continue;
+				predictRes.add(new Prediction(routeId, route.getRouteName(), 
+						time, bus, pos[0], pos[1]));
 			}
-			System.out.println(predictRes);
+			System.out.println("predictionRes: " + predictRes);
 		} catch (RollbackException e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {
@@ -174,7 +183,8 @@ public class ManageAction extends Action {
 		return stops;
 	}
 	
-	private static String[] getTime(String routeId, String stopId) throws IOException {
+	private static String[] getTime(String routeId, String stopId) 
+			throws IOException {
 		HttpURLConnection connection = null;
 		URL url = new URL("http://truetime.portauthority.org/bustime/"
 				+ "api/v2/getpredictions?key=ADpCvpyDcupACyuMdk5wrVTVH"
@@ -192,11 +202,35 @@ public class ManageAction extends Action {
 		JSONArray times = (JSONArray) results.get("prd");
 		if (times == null || times.size() == 0) return null;
 		JSONObject time = (JSONObject) times.get(0);
-		String[] prediction = new String[2];
+		String[] prediction = new String[3];
 		prediction[0] = (String) time.get("tmstmp");
 		prediction[1] = (String) time.get("prdtm");
+		prediction[2] = (String) time.get("vid");
 		return prediction;
 	}
+	private String[] getPos(String bus) throws IOException {
+		HttpURLConnection connection = null;
+		URL url = new URL("http://truetime.portauthority.org/bustime/"
+				+ "api/v2/getvehicles?key=ADpCvpyDcupACyuMdk5wrVTVH"
+				+ "&vid=" + bus + "&format=json");
+		connection =  (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("GET");
+		connection.setDoOutput(true);
+		connection.setDoInput(true);
+		connection.setUseCaches(false);
+				
+		JSONObject obj = (JSONObject) JSONValue
+				.parse(readResponse(connection));
+		JSONObject results = (JSONObject) obj.get("bustime-response");		
+		JSONArray vehicles = (JSONArray) results.get("vehicle");
+		if (vehicles == null || vehicles.size() == 0) return null;
+		JSONObject vehicle = (JSONObject) vehicles.get(0);
+		String[] position = new String[2];
+		position[0] = (String) vehicle.get("lat");
+		position[1] = (String) vehicle.get("lon");
+		return position;
+	}
+	
 	private static String readResponse(HttpURLConnection connection) {
 		try {
 			StringBuilder str = new StringBuilder();
