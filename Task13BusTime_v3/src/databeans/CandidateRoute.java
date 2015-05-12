@@ -5,8 +5,14 @@ import java.util.List;
 
 public class CandidateRoute {
     public List<RouteStep> Steps;
+    private List<WayPoint> wayPoints;
+    
     private String summary;
     private String estimatedArrivalTime;
+    public List<WayPoint> getWayPoints()
+    {
+        return wayPoints;
+    }
     public String getSummary()
     {
         return summary;
@@ -27,6 +33,7 @@ public class CandidateRoute {
     }
     public void ComputeSummary()
     {
+        wayPoints = new ArrayList<WayPoint>();
         StringBuilder buses = new StringBuilder();
         buses.append("Via ");
         boolean first = true;
@@ -46,5 +53,6 @@ public class CandidateRoute {
             summary = buses.toString();
         else
             summary = "Walk";
+        
     }
 }
