@@ -68,7 +68,7 @@
   <!-- Wait Time Form --> 
   <div class="row" align="center">
 	<div class="col-lg-12">	
-     <form method="GET" name="waitingTime" id="waitingForm" action="manage.do">
+     <form method="GET" name="waitingTime" id="waitingForm" action="manage.do" onsubmit="return storeValues(this);">
         <div class="control-group form-group">
           <div class="controls">
           <div align="left"><h4>Route Numbe</h4></div>         
@@ -252,6 +252,11 @@ function storeValue(form) {
 	setCookie("stop", form.stop.value);
 	return true;
 } 
+</script>
+
+<script type="text/javascript">
+if(route = getCookie("route")) document.waitingTime.route.value = route;
+if(route = getCookie("stop")) document.waitingTime.stop.value = stop;
 </script>
 
 </body>
