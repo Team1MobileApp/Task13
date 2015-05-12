@@ -60,6 +60,11 @@ public class RouteAction extends Action {
         return (sdf.format(cal.getTime()));
     }
 
+    /*
+     * -get routes and estimation time with require parameter origin,
+     * destination and optional parameter departureTime or arrivalTime -return
+     * ViewRoute.jsp page
+     */
     @Override
     public String perform(HttpServletRequest request) {
         String origin = request.getParameter("origin");
@@ -67,20 +72,23 @@ public class RouteAction extends Action {
         String departureTime = request.getParameter("departureTime");
         String arrivalTime = request.getParameter("arrivalTime");
         if (arrivalTime == null && departureTime == null)
-            departureTime = Long.toString(Calendar.getInstance().getTimeInMillis()/1000);
+            departureTime = Long.toString(Calendar.getInstance()
+                    .getTimeInMillis() / 1000);
         if (origin == null)
             origin = "5000 forbes ave, pittsburgh, pa";
         if (dest == null)
             dest = "1 PPG pl, pittsburgh, pa";
 
         try {
-            List<CandidateRoute> routes = getAllRoutes(origin, dest, arrivalTime, departureTime);
-            List<RouteEstimation> estimations = estimateRoutes(routes);
-            for (int i = 0; i<routes.size(); i++)
-            {
+            List<CandidateRoute> routes = getAllRoutes(origin, dest,
+                    arrivalTime, departureTime);
+            Calendar departureCal = Calendar.getInstance();
+            departureCal.setTimeInMillis(Long.parseLong(departureTime) * 1000);
+            List<RouteEstimation> estimations = estimateRoutes(routes,
+                    departureCal);
+            for (int i = 0; i < routes.size(); i++) {
                 String time = "N/A";
-                if (i < estimations.size())
-                {
+                if (i < estimations.size()) {
                     time = formatDate(estimations.get(i).ArrivalTime.getTime(),
                             "MM/dd HH:mm");
                 }
@@ -109,21 +117,28 @@ public class RouteAction extends Action {
             e.printStackTrace();
         }
 
-
         request.getSession().setAttribute("origin", origin);
         request.getSession().setAttribute("destination", dest);
-        request.getSession().setAttribute("departureTime", departureTime+"000");
-        request.getSession().setAttribute("arrivalTime", arrivalTime+"000");
+        request.getSession().setAttribute("departureTime",
+                departureTime + "000");
+        request.getSession().setAttribute("arrivalTime", arrivalTime + "000");
         return "ViewRoute.jsp";
     }
 
+    /*
+     * initial arrival time = departure timefor walk model: time += walk
+     * durationfor bus model: if there are walk model before, calculate the
+     * bus's arrival time from the departure time plus walk durationthen add
+     * bus's duration time in this segmentfor each segment, do the same thing
+     */
     private static List<RouteEstimation> estimateRoutes(
-            List<CandidateRoute> routes) throws IOException, RollbackException {
+            List<CandidateRoute> routes, Calendar departureTime)
+            throws IOException, RollbackException {
         List<RouteEstimation> result = new ArrayList<RouteEstimation>();
         for (CandidateRoute route : routes) {
             RouteEstimation restimate = new RouteEstimation();
             restimate.Segments = new ArrayList<SegmentEstimation>();
-            Calendar arrivalTime = Calendar.getInstance();
+            Calendar arrivalTime = departureTime;
             for (RouteStep step : route.Steps) {
                 WayPoint wp = new WayPoint();
                 wp.setLatitute(Double.parseDouble(step.StartPos.Latitute));
@@ -137,7 +152,7 @@ public class RouteAction extends Action {
                 route.getWayPoints().add(wp);
                 if (step.Type.equals(StepType.Walk)) {
                     arrivalTime.add(Calendar.SECOND, step.Duration);
-                   
+
                 } else if (step.Type.equals(StepType.Bus)) {
                     List<String> directions = getRouteDirections(step.BusRoute);
                     String direction = directions.get(0);
@@ -151,20 +166,24 @@ public class RouteAction extends Action {
                     int startStopId = -1, endStopId = -1;
                     if (stops != null) {
                         for (BusStop s : stops) {
-                            if (Math.abs(s.Latitute - Double.parseDouble(step.StartPos.Latitute))<0.001 &&
-                                Math.abs(s.Longitute - Double.parseDouble(step.StartPos.Longitute)) < 0.001)
+                            if (Math.abs(s.Latitute
+                                    - Double.parseDouble(step.StartPos.Latitute)) < 0.001
+                                    && Math.abs(s.Longitute
+                                            - Double.parseDouble(step.StartPos.Longitute)) < 0.001)
                                 startStopId = s.Id;
                             if (startStopId != -1 && endStopId == -1) {
-                                //WayPoint wp = new WayPoint();
-                                //wp.setLatitute(s.Latitute);
-                                //wp.setLongitute(s.Longitute);
-                                //wp.setType(1);
-                                //route.getWayPoints().add(wp);
+                                // WayPoint wp = new WayPoint();
+                                // wp.setLatitute(s.Latitute);
+                                // wp.setLongitute(s.Longitute);
+                                // wp.setType(1);
+                                // route.getWayPoints().add(wp);
                             }
-                            if (Math.abs(s.Latitute - Double.parseDouble(step.EndPos.Latitute))<0.001 &&
-                                    Math.abs(s.Longitute - Double.parseDouble(step.EndPos.Longitute)) < 0.001)
+                            if (Math.abs(s.Latitute
+                                    - Double.parseDouble(step.EndPos.Latitute)) < 0.001
+                                    && Math.abs(s.Longitute
+                                            - Double.parseDouble(step.EndPos.Longitute)) < 0.001)
                                 endStopId = s.Id;
-                            
+
                         }
                     }
                     BusPrediction earliestBus = null;
@@ -186,7 +205,7 @@ public class RouteAction extends Action {
 
                         Calendar parrivalTime = predictBusArrivalTime(
                                 step.BusRoute, earliestBus.VehicleId, endStopId);
-                        
+
                         if (parrivalTime != null) {
                             arrivalTime = parrivalTime;
                         } else
@@ -204,6 +223,9 @@ public class RouteAction extends Action {
         return result;
     }
 
+    /*
+     * use PAAC api and bus stop name return estimated bus arrival time
+     */
     private static Calendar predictBusArrivalTime(String routeName, int vid,
             int stopId) {
         try {
@@ -242,6 +264,10 @@ public class RouteAction extends Action {
         }
     }
 
+    /*
+     * use PAAC api and bus's route name and stop id return the arrival time the
+     * bus(route name) arrive at stop(id)
+     */
     private static List<BusPrediction> getBusPrediction(String routeName,
             int stopId) {
         HttpURLConnection connection = null;
@@ -288,6 +314,9 @@ public class RouteAction extends Action {
         }
     }
 
+    /*
+     * return a route's all direction eg: inbound, outbound, westbound,eastbound
+     */
     private static List<String> getRouteDirections(String routeName)
             throws IOException, RollbackException {
         HttpURLConnection connection = null;
@@ -311,6 +340,10 @@ public class RouteAction extends Action {
         return result;
     }
 
+    /*
+     * use PAAC api get a route's all stops' name, id and longitude&latitude
+     * with this route name and direction
+     */
     private static List<BusStop> getStops(String routeName, String dirName)
             throws IOException, RollbackException {
         HttpURLConnection connection = null;
@@ -344,11 +377,17 @@ public class RouteAction extends Action {
         return result;
     }
 
-    private static List<CandidateRoute> getAllRoutes(String origin, String dest, String arrivalTime, String departureTime)
+    /*
+     * use Google api get all candidate routes with departure place, arrival
+     * place, arrival time and departure time
+     */
+    private static List<CandidateRoute> getAllRoutes(String origin,
+            String dest, String arrivalTime, String departureTime)
             throws IOException, RollbackException {
         HttpURLConnection connection = null;
         String urlStr = "http://maps.googleapis.com/maps/api/directions/json?origin="
-                + URLEncoder.encode(origin, "UTF-8") + "&destination="
+                + URLEncoder.encode(origin, "UTF-8")
+                + "&destination="
                 + URLEncoder.encode(dest, "UTF-8")
                 + "&sensor=false&mode=transit&alternatives=true";
 
@@ -357,7 +396,6 @@ public class RouteAction extends Action {
         else if (departureTime != null)
             urlStr = urlStr + "&departure_time=" + departureTime;
         URL url = new URL(urlStr);
-            
 
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -390,8 +428,8 @@ public class RouteAction extends Action {
                             .get("start_location")).get("lng").toString();
                     s.EndPos.Latitute = ((JSONObject) jstep.get("end_location"))
                             .get("lat").toString();
-                    s.EndPos.Longitute = ((JSONObject) jstep.get("end_location"))
-                            .get("lng").toString();
+                    s.EndPos.Longitute = ((JSONObject) jstep
+                            .get("end_location")).get("lng").toString();
                     if (travelMode.equals("WALKING")) {
                         s.Type = StepType.Walk;
                         parsedRoute.Steps.add(s);
@@ -403,8 +441,7 @@ public class RouteAction extends Action {
                                 .get("short_name").toString();
                         s.FullRouteName = ((JSONObject) transitDetails
                                 .get("line")).get("name").toString();
-                        s.HeadSign = transitDetails
-                                .get("headsign").toString();
+                        s.HeadSign = transitDetails.get("headsign").toString();
                         s.StartPos.Name = ((JSONObject) transitDetails
                                 .get("departure_stop")).get("name").toString();
                         s.EndPos.Name = ((JSONObject) transitDetails
