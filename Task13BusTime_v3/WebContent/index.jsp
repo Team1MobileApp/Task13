@@ -67,10 +67,11 @@
 
   <!-- Wait Time Form --> 
   <div class="row" align="center">
-	<div class="col-lg-12">
+	<div class="col-lg-12">	
      <form method="GET" name="waitingTime" id="waitingForm" action="manage.do">
         <div class="control-group form-group">
           <div class="controls">
+          <div align="left"><h4>Route Numbe</h4></div>         
             <input name="route" type="select" list="routeIds" class="form-control" id="route" placeholder="Please enter Bus Route Number, ex: 71A" required data-validation-required-message="Please enter a bus route number" >
             <datalist id="routeIds">
             <option value="1 Freeport Road">
@@ -161,7 +162,8 @@
             </datalist>   
             
             <p class="help-block"></p>
-
+            
+			<div align="left"><h4>Street/Bus Stop</h4></div>
             <input type="select" list="streets" class="form-control" id="name" name="stop" placeholder="Please select bus stop, ex: Centre Ave and 5th" required data-validation-required-message="Please enter a bus route number" >
             <datalist id="streets">
             <option value="5th Ave at Bellefield Ave">
@@ -233,5 +235,24 @@
 		document.waitingTime.direction.value = "OUTBOUND"
 	}
 </script>
+
+<!-- Modified by Backy for Testing Purpose... -->
+<script type="text/javascript">
+var today = new Date();
+var expiry = new Date(today.getTime() + 30*24*3600*1000); //expires in 30 days
+
+function setCookie(name, value) {
+	document.cookie = name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
+}
+</script>
+
+<script type="text/javascript">
+function storeValue(form) {
+	setCookie("route",form.route.value);
+	setCookie("stop", form.stop.value);
+	return true;
+} 
+</script>
+
 </body>
 </html>
