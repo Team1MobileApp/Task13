@@ -244,12 +244,14 @@
 		// To add the marker to the map, call setMap();
 		marker.setMap(map);
 		
-		setTimeout(function() {
+		/* setTimeout(function() {
 			var newLocation = new Array();
 			newLocation = updateMarker(myBusNumber, myLat, myLon);
 			var position = new google.maps.LatLng(newLocation[0], newLocation[1]);
 	        marker.setPosition(position);
-		}, 30000);
+		}, 30000); */
+		
+		updateMarker(marker, myBusNumber, myLat, myLon);
 		
 	<%}%>
 		}
@@ -276,8 +278,17 @@
 		
 		// for ajax to get new location of each bus
 		function updateMarker() {
-			var loc = new Array();
-			var busNumber = arguments[0];
+			var marker = arguments[0];
+			var busNumber = arguments[1];
+			 
+			setInterval(function(){ requestAjax(marker, busNumber); }, 1000);
+			
+		}
+		
+		function requestAjax() {
+			var loc = new Array(); 
+			var marker = arguments[0];
+			var busNumber = arguments[1];
 			dataString = "busNumber=" + busNumber;
 			console.log("dataString = " + dataString);
 			
@@ -293,9 +304,9 @@
 	            	console.log("successfully get response! " + data);
 	            	
 	            	loc[0] = data.lat;
-	            	console.log("loc[0] = " + loc[0]);
+	            	console.log("newLat = " + loc[0]);
 	            	loc[1] = data.lon;
-	            	console.log("loc[1] = " + loc[1]);
+	            	console.log("newLon = " + loc[1]);
 	            },
 	            
 	            //If there was no response from the server
@@ -316,10 +327,10 @@
 	                //enable the button 
 	            	console.log("complete");
 	            }
-				
 			});
-				
-			return loc;
+			
+			var position = new google.maps.LatLng(loc[0], loc[1]);
+	        marker.setPosition(position);
 		}
 		
 		
