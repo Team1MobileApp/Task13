@@ -24,7 +24,6 @@ import sun.net.www.protocol.http.HttpURLConnection;
 import databeans.Stop;
 
 public class TrackAction extends Action {
-
 	private StopDAO stopDAO;
 	private static String apiKey = "ADpCvpyDcupACyuMdk5wrVTVH";
 
