@@ -17,7 +17,7 @@ public class Model {
 			String jdbcURL    = config.getInitParameter("jdbcURL");
 			
 			ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
-			stopDAO = new StopDAO("stop", pool);
+			stopDAO = new StopDAO("Stop", pool);
 		} catch (DAOException e) {
 			throw new ServletException(e);
 		}

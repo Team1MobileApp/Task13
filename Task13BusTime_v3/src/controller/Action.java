@@ -26,7 +26,7 @@ public abstract class Action {
     		}
     }
 
-    public static String perform(String name,HttpServletRequest request) {
+    public static String perform(String name, HttpServletRequest request) {
         Action a;
         synchronized (hash) {
         		a = hash.get(name);

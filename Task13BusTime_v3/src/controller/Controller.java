@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+import org.json.simple.JSONObject;
+
 import model.Model;
 
 @SuppressWarnings("serial")
@@ -16,7 +21,10 @@ public class Controller extends HttpServlet {
 
     public void init() throws ServletException {
         Model model = new Model(getServletConfig());
+        Action.add(new InitAction(model));
+        Action.add(new StopNameAction(model));
         Action.add(new ManageAction(model));
+        Action.add(new TrackAction(model));
         Action.add(new RouteAction(model));
     }
 
@@ -26,8 +34,8 @@ public class Controller extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nextPage = performTheAction(request);
-        System.out.println(nextPage);
-        sendToNextPage(nextPage,request,response);
+        System.out.println("nextPage: " + nextPage);
+        sendToNextPage(nextPage, request, response);
     }
     
     /*
@@ -83,6 +91,23 @@ public class Controller extends HttpServlet {
 	   		return;
     	}
     	
+    	if (nextPage.equals("stop.ajax")) {
+    		System.err.println("nextPage = stop.ajax");
+    		JSONObject stopObj = (JSONObject) request.getAttribute("stopObj");
+    		System.err.println("stopObj == null: " + (stopObj == null));
+    		setResponse(response, stopObj);
+    		return;
+    	}
+    	
+    	if (nextPage.equals("track.ajax")) {
+    		System.err.println("nextPage = track.ajax");
+    		JSONObject locObj = (JSONObject) request.getAttribute("locObj");
+    		System.err.println("locObj == null: " + (locObj == null));
+    		setResponse(response, locObj);
+    		return;
+    	}
+    	
+    	
     	throw new ServletException(Controller.class.getName()+".sendToNextPage(\"" + nextPage + "\"): invalid extension.");
     }
 
@@ -95,4 +120,19 @@ public class Controller extends HttpServlet {
         int slash = path.lastIndexOf('/');
         return path.substring(slash+1);
     }
+    
+    private void setResponse(HttpServletResponse response, JSONObject jsonObj) throws IOException, ServletException {
+    	PrintWriter out = response.getWriter();
+    	response.setContentType("application/json; charset=utf-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Max-Age", "86400");
+        System.err.println("In setResponse:");
+        System.err.println(jsonObj.toString());
+        out.print(jsonObj);
+        out.close();
+    }
+    
+    
 }

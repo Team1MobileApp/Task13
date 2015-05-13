@@ -1,8 +1,14 @@
+/*
+ * Author: Qianwen Li
+ * Date: 5/11/2015
+ * 
+ * */
+
 package model;
 
+import org.genericdao.ConnectionPool;
 import org.genericdao.DAOException;
 import org.genericdao.GenericDAO;
-import org.genericdao.ConnectionPool;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
@@ -12,17 +18,28 @@ public class StopDAO extends GenericDAO<Stop> {
 	public StopDAO(String tableName, ConnectionPool pool) throws DAOException{
 		super(Stop.class, tableName, pool);
 	}
-	public void createStop(Stop stop) throws RollbackException {
-		create(stop);
+	public void create(Stop stop) throws RollbackException {
+		createAutoIncrement(stop);
 	}
-	public int getStopCount() throws RollbackException {
-		return getCount();
+
+	public Stop read(String stopName, String direction) throws RollbackException {
+		//TODO: later check upper/lowercase
+		Stop[] stops = match(MatchArg.and(MatchArg.equals("stopName", stopName), MatchArg.equals("direction", direction)));
+		if (stops.length != 0) return stops[0];
+		return null;
 	}
-	public Stop[] getStopId(String bound, String stopName) throws RollbackException {
-		Stop[] stop = match(MatchArg.and(MatchArg.equals("bound", bound), MatchArg.equals("stopName", stopName)));
-		System.err.println("stop == null ? " + stop ==  null);
-		if (stop == null) return null;
-		return stop;
+	
+	public Stop[] getStops(String direction, String routeId) throws RollbackException {
+		System.err.println("in the getAllStopName");
+		System.err.println("direction = " + direction + ", routeId = " + routeId);
+		Stop[] stops = match(MatchArg.and(MatchArg.equals("direction", direction), MatchArg.equals("routeId", routeId)));
+		
+		System.err.println("stops == null: " + (stops == null));
+		if (stops != null) {
+			System.err.println("stops == length : " + (stops.length));
+			return stops;
+		}
+		return null;
 	}
 	
 }

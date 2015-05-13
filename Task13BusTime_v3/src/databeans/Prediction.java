@@ -1,3 +1,9 @@
+/*
+ * Author: Qianwen Li
+ * Date: 5/11/2015
+ * 
+ * */
+
 package databeans;
 
 public class Prediction {
