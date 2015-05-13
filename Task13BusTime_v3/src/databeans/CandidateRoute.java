@@ -10,46 +10,54 @@ import java.util.List;
 /* This class contains a certain route's each steps
  * summary and estimatedArrivalTime are used for frontend display*/
 public class CandidateRoute {
-	public List<RouteStep> Steps;
-	private String summary;
-	private String estimatedArrivalTime;
+    public List<RouteStep> Steps;
+    private List<WayPoint> wayPoints;
 
-	public String getSummary() {
-		return summary;
-	}
+    private String summary;
+    private String estimatedArrivalTime;
 
-	public void setSummary(String sum) {
-	}
+    public List<WayPoint> getWayPoints() {
+        return wayPoints;
+    }
 
-	public String getEstimatedArrivalTime() {
-		return estimatedArrivalTime;
-	}
+    public String getSummary() {
+        return summary;
+    }
 
-	public void setEstimatedArrivalTime(String time) {
-		estimatedArrivalTime = time;
-	}
+    public void setSummary(String sum) {
+    }
 
-	public CandidateRoute() {
-		Steps = new ArrayList<RouteStep>();
-	}
+    public String getEstimatedArrivalTime() {
+        return estimatedArrivalTime;
+    }
 
-	public void ComputeSummary() {
-		StringBuilder buses = new StringBuilder();
-		buses.append("Via ");
-		boolean first = true;
-		boolean containsBus = false;
-		for (RouteStep s : Steps) {
-			if (s.BusRoute != null) {
-				if (!first)
-					buses.append(", ");
-				buses.append(s.BusRoute);
-				first = false;
-				containsBus = true;
-			}
-		}
-		if (containsBus)
-			summary = buses.toString();
-		else
-			summary = "Walk";
-	}
+    public void setEstimatedArrivalTime(String time) {
+        estimatedArrivalTime = time;
+    }
+
+    public CandidateRoute() {
+        Steps = new ArrayList<RouteStep>();
+    }
+
+    public void ComputeSummary() {
+        wayPoints = new ArrayList<WayPoint>();
+        StringBuilder buses = new StringBuilder();
+        buses.append("Via ");
+        boolean first = true;
+        boolean containsBus = false;
+        for (RouteStep s : Steps) {
+            if (s.BusRoute != null) {
+                if (!first)
+                    buses.append(", ");
+                buses.append(s.BusRoute);
+                first = false;
+                containsBus = true;
+            }
+        }
+        if (containsBus)
+            summary = buses.toString();
+        else
+            summary = "Walk";
+
+    }
 }
