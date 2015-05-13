@@ -1,31 +1,27 @@
 package databeans;
 
 public class Prediction {
-	private String routeName;
 	private String routeId;
-	private String time;
+	private String routeName;
+	private String stopName;
+	private String predictTime;
+	private String waitTime;
+	private String direction;
 	private String busNumber;
-	private String lat;
-	private String lon;
+	private double lat;
+	private double lon;
 	
-	public Prediction() {
-		this("", "", "", "", "", "");
-	}
-	public Prediction(String routeId, String routeName, String time, String busNumber,
-			String lat, String lon) {
-		this.routeName = routeName;
+	public Prediction(String routeId, String routeName, String stopName, String predictTime, String waitTime, String direction, String busNumber,
+			double lat, double lon) {
 		this.routeId = routeId;
-		this.time = time;
+		this.routeName = routeName;
+		this.stopName = stopName;
+		this.predictTime = predictTime;
+		this.waitTime = waitTime;
+		this.direction = direction;
 		this.busNumber = busNumber;
 		this.lat = lat;
 		this.lon = lon;
-	}
-	
-	public String getRouteName() {
-		return routeName;
-	}
-	public void setRouteName(String routeName) {
-		this.routeName = routeName;
 	}
 	public String getRouteId() {
 		return routeId;
@@ -33,11 +29,35 @@ public class Prediction {
 	public void setRouteId(String routeId) {
 		this.routeId = routeId;
  	}
-	public String getTime() {
-		return time;
+	public String getRouteName() {
+		return routeName;
 	}
-	public void setTime(String time) {
-		this.time = time;
+	public void setRouteName(String routeName) {
+		this.routeName = routeName;
+	}
+	public String getStopName() {
+		return stopName;
+	}
+	public void setStopName(String stopName) {
+		this.stopName = stopName;
+	}
+	public String getPredictTime() {
+		return predictTime;
+	}
+	public void setPredictTime(String predictTime) {
+		this.predictTime = predictTime;
+	}
+	public String getWaitTime() {
+		return waitTime;
+	}
+	public void setWaitTime(String waitTime) {
+		this.waitTime = waitTime;
+	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 	public String getBusNumber() {
 		return busNumber;
@@ -45,20 +65,20 @@ public class Prediction {
 	public void setBusNumber(String busNumber) {
 		this.busNumber = busNumber;
 	}
-	public String getLat() {
+	public double getLat() {
 		return lat;
 	}
-	public void setLat(String lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
-	public String getLon() {
+	public double getLon() {
 		return lon;
 	}
-	public void setLon(String lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 	
 	public String toString() {
-		return routeId + " ," + time + ", " + lat + ", " + lon + "\n"; 
+		return routeId + " ," + predictTime + ", " + lat + ", " + lon + "\n"; 
 	}
 }

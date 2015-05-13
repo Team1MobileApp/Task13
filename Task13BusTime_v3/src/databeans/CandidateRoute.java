@@ -1,8 +1,14 @@
+/******************************
+ * Author: Biqiu Li
+ * Date: 2015/05/09
+ ******************************/
 package databeans;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/* This class contains a certain route's each steps
+ * summary and estimatedArrivalTime are used for frontend display*/
 public class CandidateRoute {
 	public List<RouteStep> Steps;
 	private String summary;

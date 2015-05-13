@@ -8,7 +8,8 @@ import org.genericdao.DAOException;
 
 
 public class Model {
-	private RouteDAO  routeDAO;
+
+	private StopDAO stopDAO;
 	
 	public Model(ServletConfig config) throws ServletException {
 		try {
@@ -16,13 +17,14 @@ public class Model {
 			String jdbcURL    = config.getInitParameter("jdbcURL");
 			
 			ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
-			routeDAO = new RouteDAO("route", pool);
+			stopDAO = new StopDAO("stop", pool);
 		} catch (DAOException e) {
 			throw new ServletException(e);
 		}
 	}
 	
-	public RouteDAO getRouteDAO() {
-		return routeDAO;
+	public StopDAO getStopDAO() {
+		return stopDAO;
 	}
+
 }

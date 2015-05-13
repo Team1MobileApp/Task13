@@ -31,7 +31,6 @@
 
     <welcome-file-list>
         <welcome-file>   init.do   </welcome-file>
-        <!--welcome-file>   simple.html   </welcome-file-->
     </welcome-file-list>
 
     <!-- Session Configuration -->
