@@ -88,6 +88,7 @@
 		var timeStr = document.getElementById("timeField").value;
 		var h = timeStr.substring(0, 2);
 		var m = timeStr.substring(3, 5);
+		dateTime.setDate(dateTime.getDate()+1);
 		dateTime.setHours(h);
 		dateTime.setMinutes(m);
 		if (useDepartureTime)

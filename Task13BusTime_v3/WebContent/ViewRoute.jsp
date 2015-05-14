@@ -166,11 +166,11 @@ body {
   <br />
   <br />
   <!-- Page Heading-->
-  <div class="row" style="margin-up: 150px">
-    <div class="col-lg-8, col-md-offset-2">
+  <div class="row" style="margin-up: 150px;height:100%">
+    <div class="col-lg-8, col-md-offset-2" style="height:100%">
       <table style="height: 100%; width: 100%; margin-left: 20px">
         <tr style="height: 100%">
-          <td width="20%">
+          <td width="20%" style="height:100%;vertical-align:top">
             <% List<RouteEstimation> estimations = (List<RouteEstimation>)session.getAttribute("Estimations"); %>
             <% for (int i = 0; i < routes.size(); i++) { %>
             <h5>
@@ -196,7 +196,7 @@ body {
                         %>
             </h5> <%} %>
           </td>
-          <td width="80%">
+          <td width="80%" style="height:100%">
             <div id="map_canvas" style="width: 80%; height: 100%"></div>
           </td>
         </tr>
