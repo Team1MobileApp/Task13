@@ -155,13 +155,26 @@
 				<form method="get" name="trip planner" id="trip">
 					<div class="control-group form-group">
 						<div class="controls">
-							<label>Origin</label> <input type="text" class="form-control"
-								id="origin" value="Current Location" required
-								data-validation-required-message="Please enter origin">
+						<table cellspacing="30px">
+						<tr>
+						<td style="padding:10px"><img src="img/departure.png" width="30px" height="30px"/> </td>
+						<td style="padding:10px"><input type="text" class="form-control"
+                                id="origin" value="Current Location" required
+                                data-validation-required-message="Please enter origin">
+                                </td>
+						</tr>
+						<tr></tr>
+						<tr>
+                        <td style="padding:10px"><img src="img/destination.png" width="30px" height="30px"/></td>
+                       
+                        <td style="padding:10px"><input type="text" class="form-control" id="destination"
+                                placeholder="Enter an address" required
+                                data-validation-required-message="Please enter destination"></td>
+                        </tr>
+						</table>
+							
 							<p id="demo"></p>
-							<input type="text" class="form-control" id="destination"
-								placeholder="Enter an address or the name of a place" required
-								data-validation-required-message="Please enter destination">
+							
 							<br> <br>
 							<div class="container">
 								<button type="button" class="btn btn-default"
