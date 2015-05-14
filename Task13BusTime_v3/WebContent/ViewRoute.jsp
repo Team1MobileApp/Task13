@@ -170,11 +170,12 @@ body {
     <div class="col-lg-8, col-md-offset-2" style="height:100%">
       <table style="height: 100%; width: 100%; margin-left: 20px">
         <tr style="height: 100%">
-          <td width="20%" style="height:100%;vertical-align:top">
+          <td width="100%" style="height:100%;vertical-align:top">
+          <div class="list-group">
             <% List<RouteEstimation> estimations = (List<RouteEstimation>)session.getAttribute("Estimations"); %>
             <% for (int i = 0; i < routes.size(); i++) { %>
-            <h5>
-              <a href="#" onclick="showRoute(<%=i%>);"><%=routes.get(i).getSummary() %></a>
+            <h4 class="list-group-item-heading">
+              <a href="#" onclick="showRoute(<%=i%>);" class="list-group-item"><%=routes.get(i).getSummary() %></a>
               <br />Estimated Arrival:
               <%=routes.get(i).getEstimatedArrivalTime()%>
               <% RouteEstimation est = estimations.get(i);
@@ -194,10 +195,9 @@ body {
               <%
                            }
                         %>
-            </h5> <%} %>
-          </td>
-          <td width="80%" style="height:100%">
-            <div id="map_canvas" style="width: 80%; height: 100%"></div>
+            </h4> <%} %>
+            </div>
+            <div id="map_canvas" style="width: 100%; height: 100%"></div>
           </td>
         </tr>
       </table>
