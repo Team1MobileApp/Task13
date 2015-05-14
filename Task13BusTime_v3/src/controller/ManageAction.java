@@ -30,6 +30,7 @@ public class ManageAction extends Action {
 	private StopDAO stopDAO;
 	private static String apiKey = "ADpCvpyDcupACyuMdk5wrVTVH";
 
+
 	public ManageAction(Model model) {
 		stopDAO = model.getStopDAO();
 	}
@@ -55,10 +56,15 @@ public class ManageAction extends Action {
 		// TODO: fix this bug
 		String stopName = ((String) request.getParameter("stop")).trim();
 		System.err.println("stopName = " + stopName);
+		
+		double stopLat = 0;
+		double stopLon = 0;
 		try {
 			Stop stop = stopDAO.read(stopName, direction);
 			if (stop != null) {
 				stopIdToUse = stop.getStopId();
+				stopLat = stop.getStopLat();
+				stopLon = stop.getStopLon();
 			}
 			System.err.println("stopIdToUse = " + stopIdToUse);
 		} catch (RollbackException re) {
@@ -72,11 +78,14 @@ public class ManageAction extends Action {
 		// get result
 		try {
 			// getVehicle(routeIdToUse);
-			request.setAttribute("stopIdToUse", stopIdToUse);
+			request.setAttribute("stopName", stopName);
+			request.setAttribute("stopLat", stopLat);
+			request.setAttribute("stopLon", stopLon);
 
 			// get single route prediction time
 			// call getTime()
 			Prediction predictOne = getTime(routeId, stopIdToUse, direction);
+			
 			request.setAttribute("predictOne", predictOne);
 
 			// If all buses checked, get all time
@@ -168,8 +177,12 @@ public class ManageAction extends Action {
 			// busNumber
 			String busNumber = (String) jo.get("vid");
 			
-			double[] location = getLocation(busNumber);
-			if (location == null || location.length == 0) continue;
+			double[] location = getLocation(busNumber); 
+			if (location == null || location.length == 0) {
+				location = new double[2];
+				location[0] = 40.45935874149717;
+				location[1] = -79.92761098927465;
+			}
 			predictList.add(new Prediction(routeId, routeName, stopName,
 					predictTime, waitTime, direction, busNumber, location[0],
 					location[1]));
@@ -211,7 +224,7 @@ public class ManageAction extends Action {
 		// TODO: if there's no match here, modify the error message
 		if (!dir.equals(direction)) {
 			waitTime = "0";
-			predictTime = "No available";
+			predictTime = "Not available";
 		} else {
 			prediction[0] = ((String) time.get("tmstmp")).trim();
 			prediction[1] = ((String) time.get("prdtm")).trim();
@@ -246,6 +259,11 @@ public class ManageAction extends Action {
 		// busNumber
 		String busNumber = (String) time.get("vid");
 		double[] location = getLocation(busNumber);
+		if (location == null || location.length == 0) {
+			location = new double[2];
+			location[0] = -25.363882;
+			location[1] = 131.044922;
+		}
 		Prediction rtSingle = new Prediction(routeId, routeName, stopName,
 				predictTime, waitTime, dir, busNumber, location[0], location[1]);
 		return rtSingle;
@@ -269,8 +287,8 @@ public class ManageAction extends Action {
 		if (error != null) {
 			// error handling
 			System.err.println("error: " + error.toString());
-			location[0] = 40.45935874149717;
-			location[1] = -79.92761098927465;
+			location[0] = -25.363882;
+			location[1] = 131.044922;
 			return null;
 		}
 

@@ -11,11 +11,11 @@ $(document).ready(function() {
     });
 	
     // load stop names from server/db
-    $('#direction').click(function(e) {
+    $('#inbound, #outbound').click(function(e) {
     	console.log("click button");
     	//get the form data and then serialize that
         var route = $('input#route').val();
-        var direction = $('input#direction').val();
+        var direction = $(this).val();
         dataString = "route=" + route + "&direction=" + direction
         console.log("dataString: " + dataString);
         
@@ -31,16 +31,17 @@ $(document).ready(function() {
             success: function(data) {
             	console.log("successfully get response! " + data);
             	
+            	$('#streets').html("");
             	$.each(data.stops, function(index) {
             		console.log("stop: " + stop);
-            		$('datalist#streets').append("<option value='" + data.stops[index].stopName + "'>");
+            		$('#streets').append("<option value='" + data.stops[index].stopName + "'>" + data.stops[index].stopName + "</option>");
             		
             	});
             },
             
             //If there was no response from the server
             error: function(data, status, er) {
-                 alert("error: " + data +" status: " + status +" er:" + er);
+                 //alert("error: " + data +" status: " + status +" er:" + er);
             },
             
             //capture the request before it was sent to server
@@ -49,7 +50,7 @@ $(document).ready(function() {
                 settings.data += "&dummyData=whatever";
                 console.log("before send");
                 //disable the button until we get the response
-                $('#direction').attr("disabled", true);
+                $(this).attr("disabled", true);
             },
             
             //this is called after the response or error functions are finished
@@ -57,10 +58,12 @@ $(document).ready(function() {
             complete: function(jqXHR, textStatus) {
                 //enable the button 
             	console.log("complete");
-                $('#direction').attr("disabled", false);
+                $(this).attr("disabled", false);
             }
         });
         
         return false;
     });
+    
+    
 });

@@ -15,6 +15,8 @@ public class Stop {
 	private String direction;
 	private String stopId;
 	private String routeId;
+	private double stopLat;
+	private double stopLon;
 	
 	
 	public int getId() {
@@ -56,5 +58,18 @@ public class Stop {
 	public void setRouteId(String routeId) {
 		this.routeId = routeId;
 	}
+	
+	public double getStopLat() {
+		return this.stopLat;
+	}
 
+	public void setStopLat(double stopLat) {
+		this.stopLat = stopLat;
+	}
+	public double getStopLon() {
+		return this.stopLon;
+	}
+	public void setStopLon(double stopLon) {
+		this.stopLon = stopLon;
+	}
 }

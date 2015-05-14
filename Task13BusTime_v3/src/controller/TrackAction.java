@@ -46,9 +46,10 @@ public class TrackAction extends Action {
 			System.err.println("Try to get new location here");
 		try {
 			double[] newLoc = getLocation(busNumber);
-			if (newLoc == null) {
-				System.err.println("null location");
-				return null;
+			if (newLoc == null || newLoc.length == 0) {
+				newLoc = new double[2];
+				newLoc[0] = -25.363882;
+				newLoc[1] = 131.044922;
 			}
 			JSONObject locObj = new JSONObject();
 			locObj.put("lat", newLoc[0]);

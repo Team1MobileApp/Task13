@@ -33,7 +33,7 @@ body {
 }
 </style>
 <script type="text/javascript"
-  src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB8tJ-LFoxKHQtFuWqiNgRjmQ895kTELvo&sensor=SET_TO_TRUE_OR_FALSE">
+  src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB8tJ-LFoxKHQtFuWqiNgRjmQ895kTELvo&sensor=SET_TO_TRUE_OR_FALSE&language=en">
     </script>
 <script type="text/javascript">
     var polylines = [];
@@ -141,13 +141,13 @@ body {
             class="icon-bar"></span> <span class="icon-bar"></span> <span
             class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">PortAuthority</a>
+        <a class="navbar-brand" href="index.jsp">Port Authority</a>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse"
         id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="index.html">Waiting Time</a></li>
+          <li><a href="index.jsp">Waiting Time</a></li>
           <li class="active"><a href="services.html">Trip Planner</a></li>
           <li class="dropdown"><a href="#" class="dropdown-toggle"
             data-toggle="dropdown">More<b class="caret"></b></a>
@@ -165,8 +165,24 @@ body {
   <br />
   <br />
   <br />
+  
+    		<!-- Buttons -->
+		<div class="row" align="center">
+			<div class="col-lg-12">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-success"
+						onClick="window.location.reload();">Refresh</button>
+					<button type="button" class="btn btn-primary"
+						onClick="window.location.href='index.jsp'">Go Back</button>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+  <br />
+  
   <!-- Page Heading-->
-  <div class="row" style="margin-up: 150px;height:100%">
+  <div class="row" style="height:100%">
     <div class="col-lg-8, col-md-offset-2" style="height:100%">
       <table style="height: 100%; width: 100%; margin-left: 20px">
         <tr style="height: 100%">
@@ -174,9 +190,10 @@ body {
           <div class="list-group">
             <% List<RouteEstimation> estimations = (List<RouteEstimation>)session.getAttribute("Estimations"); %>
             <% for (int i = 0; i < routes.size(); i++) { %>
-            <h4 class="list-group-item-heading">
-              <a href="#" onclick="showRoute(<%=i%>);" class="list-group-item"><%=routes.get(i).getSummary() %></a>
-              <br />Estimated Arrival:
+            <div class="list-group-item-heading">
+              <h3 style="color: #ec971f"><a href="#" onclick="showRoute(<%=i%>);" class="list-group-item" ><%=routes.get(i).getSummary()%></a></h3>
+      
+              <h4>Estimated Arrival:
               <%=routes.get(i).getEstimatedArrivalTime()%>
               <% RouteEstimation est = estimations.get(i);
                            for (int j = 0; j<est.Segments.size(); j++)
@@ -195,7 +212,7 @@ body {
               <%
                            }
                         %>
-            </h4> <%} %>
+            </h4></div> <%} %>
             </div>
             <div id="map_canvas" style="width: 100%; height: 100%"></div>
           </td>
@@ -204,6 +221,9 @@ body {
 
     </div>
   </div>
+ 
+
+  
   <!-- jQuery -->
   <script src="js/jquery.js"></script>
 

@@ -27,7 +27,7 @@ import databeans.Stop;
 public class InitAction extends Action {
 
 	private StopDAO stopDAO;
-	private static String apiKey = "ADpCvpyDcupACyuMdk5wrVTVH";
+	private static String apiKey = "DDfUaKJD2s9z2PXP5rJnBejEW";
 
 	public InitAction(Model model) {
 		stopDAO = model.getStopDAO();
@@ -66,6 +66,7 @@ public class InitAction extends Action {
 						.trim();
 				String stopName = ((String) ((JSONObject) stop).get("stpnm"))
 						.trim();
+				
 				System.err.println("stopId = " + stopId
 						+ ", map.containsKey(stopId): "
 						+ map.containsKey(stopId));
@@ -77,12 +78,17 @@ public class InitAction extends Action {
 						&& routeId.equals(map.get(stopId).getRouteId())) {
 					continue;
 				}
+				double stopLat = (double) ((JSONObject) stop).get("lat");
+				double stopLon = (double) ((JSONObject) stop).get("lon");
+				
 				Stop newStop = new Stop();
 				//stopName, bound, stopId, routeId
 				newStop.setStopName(stopName);
 				newStop.setDirection(bound);
 				newStop.setStopId(stopId);
 				newStop.setRouteId(routeId);
+				newStop.setStopLat(stopLat);
+				newStop.setStopLon(stopLon);
 				map.put(stopId, newStop);
 				stopDAO.create(newStop);
 
@@ -106,12 +112,17 @@ public class InitAction extends Action {
 						&& routeId.equals(map.get(stopId).getRouteId())) {
 					continue;
 				}
+				double stopLat = (double) ((JSONObject) stop).get("lat");
+				double stopLon = (double) ((JSONObject) stop).get("lon");
+				
 				Stop newStop = new Stop();
 				//stopName, bound, stopId, routeId
 				newStop.setStopName(stopName);
 				newStop.setDirection(bound);
 				newStop.setStopId(stopId);
 				newStop.setRouteId(routeId);
+				newStop.setStopLat(stopLat);
+				newStop.setStopLon(stopLon);
 				map.put(stopId, newStop);
 				stopDAO.create(newStop);
 			}

@@ -21,6 +21,9 @@
 <!-- Custom CSS -->
 <link href="css/index.css" rel="stylesheet">
 
+<!-- Auto Complete -->
+<script src="js/index.js"></script>
+
 <!-- JQuery Mobile -->
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -37,7 +40,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
 </head>
 
 <body>
@@ -53,7 +55,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">Port Authority</a>
+				<a class="navbar-brand" href="index.jsp">Port Authority</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
@@ -88,8 +90,6 @@
 			</div>
 		</div>
 		<!-- /.row -->
-		<br>
-
 
 		<!-- waiting time form -->
 
@@ -98,14 +98,15 @@
 				<div class="col-lg-12">
 					<div class="control-group form-group">
 						<label class="col-xs-2 col-sm-1 control label" for="routeIds">
-							<img class="img-circle" src="img/route.png" alt="route image" style="width: 60px; height: 60px;">
+							<img class="img-circle" src="img/route.png" alt="route image" style="width: 50px; height: 50px;">
 						</label>
-						<div class="col-xs-10 col-sm-9 col-md-6">
+						<div class="col-xs-10 col-sm-9 col-md-6" style="padding-top: 5px">
 							<input name="route" type="text" data-list="routeIds"
 								class="form-control input-lg" id="route"
-								placeholder="Please enter Bus Route Number, ex: 71A" required
-								data-validation-required-message="Please enter a bus route number">
-						</div>
+								placeholder="Please Enter Route Number, ex: 71A" required
+								data-validation-required-message="Please enter a bus route number"
+								>
+						
 
 						<datalist id="routeIds">
 							<option value="1 Freeport Road">
@@ -194,7 +195,7 @@
 							<option value="Y47 Curry Flyer">
 							<option value="Y49 Prospect Flyer">
 						</datalist>
-
+						</div>
 					</div>
 				</div>
 			</div>
@@ -205,19 +206,19 @@
 				<div class="col-lg-12">
 					<div class="form-group">
 						<label class="col-xs-2 col-sm-1 control label" for="bounds">
-							<img class="img-circle" src="img/bound.png" alt="route image" style="width: 60px; height: 60px;">
+							<img class="img-circle" src="img/bound.png" alt="route image" style="width: 50px; height: 50px;">
 						</label>
-						<div class="col-xs-10 col-sm-9 col-md-6">
+						<div class="col-xs-10 col-sm-9 col-md-6" style="padding-top: 9px">
 
-							<div class="btn-grou btn-lg" data-toggle="buttons">
-								<label class="btn btn-info"> <input type="button"
-									name="direction" id="direction" autocomplete="on"
-									value="INBOUND" class="btn btn-info btn-lg">
-								</label>
-								<!-- <label class="btn btn-warning btn-lg">
-										    <input type="radio" name="direction" id="option2" autocomplete="on" value="OUTBOUND"> Outbound
-										  </label> -->
-							</div>
+							<!-- <div class="btn-group" data-toggle="buttons"> -->
+								<input type="button"
+									name="direction" id="inbound" 
+									value="INBOUND" class="btn btn-warning"> 
+								<input type="button"
+									name="direction" id="outbound" 
+									value="OUTBOUND" class="btn btn-info">
+								
+							<!-- </div> -->
 						</div>
 					</div>
 				</div>
@@ -236,17 +237,17 @@
 					<div class="form-group">
 						<label class="col-xs-2 col-sm-1 control label" for="name">
 						
-						<img class="img-circle" src="img/stop.png" alt="route image" style="width: 60px; height: 60px;">
+						<img class="img-circle" src="img/stop.png" alt="route image" style="width: 50px; height: 50px;">
 						</label>
-						<div class="col-xs-10 col-sm-9 col-md-6">
+						<div class="col-xs-10 col-sm-9 col-md-6" style="padding-top: 5px">
 
-							<input type="select" list="streets"
-								class="form-control input-lg" id="name" name="stop"
-								placeholder="Please select bus stop, ex: Centre Ave and 5th"
+							<select id="streets"
+								class="form-control input-lg" name="stop"
 								required
 								data-validation-required-message="Please enter a bus route number">
-							<datalist id="streets">
-							</datalist>
+								<option value="" disabled selected>Please select bus stop, ex: Centre Ave and 5th</option>
+								
+							</select>
 						</div>
 					</div>
 				</div>
@@ -260,9 +261,10 @@
 						<label class="col-xs-1 control label" for="checkbox1">&nbsp;</label>
 						<div class="col-xs-11 col-sm-9 col-md-6">
 
+							<label for="Checkbox1"> 
 							<input name="Checkbox1" type="checkbox" id="Checkbox1"
-								value="allbuses" checked /> <label for="Checkbox1">Show
-								all buses arriving to stop</label>
+								value="allbuses" checked /> 
+							Show all buses arriving to stop</label>
 						</div>
 					</div>
 				</div>
@@ -275,10 +277,13 @@
 				<div class="col-lg-12">
 					<div class="form-group">
 						<label class="col-xs-2 col-sm-1 control label" for="submit1">&nbsp;</label>
-						<div class="col-xs-10 col-sm-9 col-md-6" align="center">
+						<div class="col-xs-10 col-sm-9 col-md-6" style="padding-top:5px" align="center">
 
-							<input type="button" class="btn btn-primary" value="Get Times"
+							<button class="btn btn-primary btn-lg"
 								id="submitbtn">
+								<i class="fa fa-clock-o fa-1g"></i>
+								Get Time
+							</button>
 						</div>
 					</div>
 				</div>
@@ -315,7 +320,7 @@
 		$(document).ready(function() {
 			$('#submitbtn').click(function() {
 				$('input#route1').val($('input#route').val());
-				$('input#direction1').val($('input#direction').val());
+				$('input#direction1').val($('input#inbound').val());
 				$('form#form2').submit();
 			});
 

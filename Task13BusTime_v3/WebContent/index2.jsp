@@ -45,8 +45,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">PortAuthority |
-					Allegheny County</a>
+				<a class="navbar-brand" href="index.jsp">Port Authority </a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
@@ -57,9 +56,8 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">More<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="about.html">About Us</a></li>
 							<li><a href="download.html">Download App</a></li>
-							<li><a href="download.html">Privacy</a></li>
+							<li><a href="privacy.html">Privacy</a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -74,19 +72,22 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h2 class="page-header">
-					Waiting Time <small> at Bus Stop <%
-					String stopIdToUse = (String) request.getAttribute("stopIdToUse");
-				if (request.getAttribute("predictOne") == null) {
-				%> Not available <%
-					} else {
-					Prediction predictOne = (Prediction) request.getAttribute("predictOne");
-				%> <%=predictOne.getStopName()%></small>
+				<% String stopName = (String) request.getAttribute("stopName"); %>
+				Waiting Time <small> at Bus Stop <%=stopName%></small>
+					
 				</h2>
 			</div>
 		</div>
 		<!-- /.row -->
 		<div class="row" align="center">
 			<div class="col-lg-12">
+			<% Prediction predictOne = (Prediction) request.getAttribute("predictOne");
+					if (predictOne == null) {
+						%>
+						<h5>Sorry, there is no available scheduled service right now </h5>
+						<% 
+					} else
+			%> 
 				<h5><%=predictOne.getRouteId()%>
 					<%=predictOne.getDirection()%>
 					|
@@ -98,7 +99,7 @@
 		</div>
 		<hr>
 		<%
-			}
+			
 		List<Prediction> predictAll = new ArrayList<Prediction>();
 		if (request.getAttribute("predictAll") != null) {
 		predictAll = (List<Prediction>) request.getAttribute("predictAll");
@@ -140,13 +141,13 @@
 
 		<hr>
 		<!-- Google Map (Real Time Tracker) -->
-		<div class="row" align="center">
-			<div class="col-lg-12">
-				<div id="map-canvas"
-					style="height: 500px; width: 100%; margin: 10px"></div>
-			</div>
-		</div>
+		
+		<div id="map-canvas"
+					style="height: 400px"></div>
+			
 		<!-- /.Google Map -->
+		
+		<br><br>
 
 		<!-- Buttons -->
 		<div class="row" align="center">
@@ -200,19 +201,37 @@
 
       // Try HTML5 geolocation
       // set current location
+      <% Double stopLat = (Double) request.getAttribute("stopLat");
+         Double stopLon = (Double) request.getAttribute("stopLon");
+      %>
       if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = new google.maps.LatLng(position.coords.latitude,
                                            position.coords.longitude);
-		  var posicon = 'img/curlocation.png';
-          var infowindow = new google.maps.InfoWindow({
-            map: map,
-            position: pos,
-            icon: posicon,
-            content: 'My location'
+		  
+          var marker = new google.maps.Marker({
+              position: pos,
+              map: map,
+              title: 'My Location',
+              draggable:true,
+              animation: google.maps.Animation.DROP,
           });
 
           map.setCenter(pos);
+          
+          var stopLat = <%=stopLat%>;
+          var stopLon = <%=stopLon%>;
+          var stopPos = new google.maps.LatLng(stopLat,stopLon);
+          var stopIcon = 'img/bus-stop.png'
+          var stopMarker = new google.maps.Marker({
+              position: stopPos,
+              map: map,
+              title: 'Stop',
+              draggable:true,
+              animation: google.maps.Animation.DROP,
+              icon: stopIcon
+          });
+          
         }, function() {
           handleNoGeolocation(true);
         });
@@ -227,8 +246,15 @@
       	double lat = predictAll.get(i).getLat();
       	double lon = predictAll.get(i).getLon();
       	System.err.println("in the page: " + busNumber + ", " + routeId + ", " + lat + ", " + lon);%>
+
       	var image = 'img/bus.png';
       	var index = <%=i%>;
+      	console.log("index = " + index);
+      	if (index <= 6) {
+      		image = 'img/bus' + index + '.png';
+      		
+      	}
+      	console.log("imaage = " + image);
       	var myBusNumber = '<%=busNumber%>';
       	var myLat = <%=lat%>;
       	var myLon = <%=lon%>;
@@ -243,13 +269,6 @@
 		console.log("marker = " + marker);
 		// To add the marker to the map, call setMap();
 		marker.setMap(map);
-		
-		/* setTimeout(function() {
-			var newLocation = new Array();
-			newLocation = updateMarker(myBusNumber, myLat, myLon);
-			var position = new google.maps.LatLng(newLocation[0], newLocation[1]);
-	        marker.setPosition(position);
-		}, 30000); */
 		
 		updateMarker(marker, myBusNumber, myLat, myLon);
 		
