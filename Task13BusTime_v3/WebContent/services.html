@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>PAAC | Trip Planner</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="css/modern-business.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"
+	type="text/css">
+<!--autocomplete -->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+<script lang="javascript">
+	var useDepartureTime = true;
+	var curAddr = null;
+	var x;
+	var y;
+	function init() {
+		x = document.getElementById("origin");
+		y = document.getElementById("destination");
+		var now = new Date();
+		var hour = now.getHours();
+		hour = hour + "";
+		if (hour.length == 1)
+			hour = "0" + hour;
+		var minute = now.getMinutes() + "";
+		if (minute.length == 1)
+			minute = "0" + minute;
+
+		document.getElementById("timeField").value = (hour + ":" + minute);
+		var mon = (now.getMonth() + 1) + "";
+		var day = now.getDate() + "";
+		if (mon.length == 1)
+			mon = "0" + mon;
+		if (day.length == 1)
+			day = "0" + day;
+		document.getElementById("date").value = now.getFullYear() + "-" + mon
+				+ "-" + day;
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		} else {
+			x.value = "Geolocation is not supported by this browser.";
+		}
+
+	}
+	function showPosition(position) {
+		curAddr = position.coords.latitude + ", " + position.coords.longitude;
+	}
+	function departureButtonClicked() {
+		useDepartureTime = true;
+	}
+	function arrivalButtonClicked() {
+		useDepartureTime = false;
+	}
+	function updateAddr() {
+		var addr = x.value;
+		if (addr == "Current Location" || addr == ""
+				|| addr == "Please enter an address.") {
+			if (curAddr != null)
+				addr = curAddr;
+			else {
+				x.setCustomValidity("Please enter an address.");
+				return;
+			}
+
+		}
+		var oldHref = window.location.href;
+		var newUrl = "./route_plan.do?origin=" + curAddr + "&destination="
+				+ y.value
+		var dateTime = new Date(document.getElementById("date").value);
+		var timeStr = document.getElementById("timeField").value;
+		var h = timeStr.substring(0, 2);
+		var m = timeStr.substring(3, 5);
+		dateTime.setHours(h);
+		dateTime.setMinutes(m);
+		if (useDepartureTime)
+			newUrl = newUrl + "&departureTime=" + (dateTime.getTime() / 1000);
+		else
+			newUrl = newUrl + "&arrivalTime=" + (dateTime.getTime() / 1000);
+		window.location = newUrl;
+
+	}
+</script>
+
+
+</head>
+
+<body onload="init()">
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">PortAuthority</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="index.html">Waiting Time</a></li>
+					<li class="active"><a href="services.html">Trip Planner</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">More<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="download.html">Download App</a></li>
+							<li><a href="privacy.html">Privacy Statement</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<!-- Page Heading-->
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">
+					Trip Planner <small> Find which buses to take</small>
+				</h1>
+			</div>
+		</div>
+		<!-- /.row -->
+
+		<!--Trip Planner Form -->
+		<div class="row" align="left">
+			<div class="col-lg-12">
+				<form method="get" name="trip planner" id="trip">
+					<div class="control-group form-group">
+						<div class="controls">
+							<label>Origin</label> <input type="text" class="form-control"
+								id="origin" value="Current Location" required
+								data-validation-required-message="Please enter origin">
+							<p id="demo"></p>
+							<input type="text" class="form-control" id="destination"
+								placeholder="Enter an address or the name of a place" required
+								data-validation-required-message="Please enter destination">
+							<br> <br>
+							<div class="container">
+								<button type="button" class="btn btn-default"
+									data-toggle="collapse" data-target="#times">More
+									Options >></button>
+								<div id="times" class="collapse">
+									<br> By default the system will plan a trip to leave now.<br>
+									<br>
+									<div class="col-sm-4">
+										<div class="btn-group" role="group" aria-label="...">
+											<input type="button" class="btn btn-default" required
+												value="Leave at:"
+												onclick="javascript:departureButtonClicked();" /> <input
+												type="button" class="btn btn-default" required
+												value="Arrive at:"
+												onclick="javascript:arrivalButtonClicked();" /> <br>
+										</div>
+
+										<input name="time" type="time" class="form-control"
+											id="timeField"> <input name="date" type="date"
+											class="form-control" id="date">
+									</div>
+								</div>
+							</div>
+
+
+							<br> <br>
+
+
+							<div id="success"></div>
+							<!-- For success/fail messages -->
+							<button type="button" class="btn btn-primary"
+								onclick="javascript:updateAddr();">Find Routes</button>
+				</form>
+			</div>
+		</div>
+		<!-- /.row -->
+
+		<hr>
+		<!-- Footer -->
+		<footer>
+			<div class="row">
+				<div align="center">
+					<p>
+						<font size="-1">Copyright 2015 &copy; Port Authority of
+							Allegheny County</font>
+					</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<!-- /.container -->
+
+	<!-- jQuery -->
+	<script src="js/jquery.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- Code to clear the text field when user clicks in it. -->
+	<script src="js/services.js"></script>
+
+</body>
+</html>
