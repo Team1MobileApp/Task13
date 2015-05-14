@@ -1,6 +1,12 @@
 /******************************
  * Author: Biqiu Li
  * Date: 2015/05/09
+ * This action focus on trip plan function.
+ * It uses origin and destination and optional paremeter(arrival time/departure time)
+ * to get the routes detail from Google api.
+ * Then it caculates estimated arrival time based on bus stop name and direction provided by Google api
+ * as well ad bus departure time and bus arrival time
+ * provided from PAAC api and rank the routes based on trip duration.
  ******************************/
 package controller;
 
@@ -62,8 +68,8 @@ public class RouteAction extends Action {
 
     /*
      * -get routes and estimation time with require parameter origin,
-     * destination and optional parameter departureTime or arrivalTime -return
-     * ViewRoute.jsp page
+     * destination and optional parameter departureTime or arrivalTime 
+     *-return ViewRoute.jsp page
      */
     @Override
     public String perform(HttpServletRequest request) {
@@ -230,7 +236,8 @@ public class RouteAction extends Action {
     }
 
     /*
-     * use PAAC api and bus stop name return estimated bus arrival time
+     * use PAAC api and bus stop name return estimated bus arrival time 
+     * and rank the routes based on trip duration
      */
     private static Calendar predictBusArrivalTime(String routeName, int vid,
             int stopId, Calendar earliestTime) {
