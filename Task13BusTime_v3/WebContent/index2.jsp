@@ -45,13 +45,13 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">Port Authority </a>
+				<a class="navbar-brand" href="index.jsp">PAAC </a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="active"><a href="index.html">Waiting Time</a></li>
+					<li class="active"><a href="index.jsp">Waiting Time</a></li>
 					<li><a href="services.html">Plan a Trip</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">More<b class="caret"></b></a>
@@ -72,22 +72,26 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h2 class="page-header">
-				<% String stopName = (String) request.getAttribute("stopName"); %>
-				Waiting Time <small> at Bus Stop <%=stopName%></small>
-					
+					<%
+						String stopName = (String) request.getAttribute("stopName");
+					%>
+					Waiting Time <br>
+					<small> at Bus Stop <%=stopName%></small>
+
 				</h2>
 			</div>
 		</div>
 		<!-- /.row -->
 		<div class="row" align="center">
 			<div class="col-lg-12">
-			<% Prediction predictOne = (Prediction) request.getAttribute("predictOne");
-					if (predictOne == null) {
-						%>
-						<h5>Sorry, there is no available scheduled service right now </h5>
-						<% 
-					} else
-			%> 
+				<%
+					Prediction predictOne = (Prediction) request.getAttribute("predictOne");
+									if (predictOne == null) {
+				%>
+				<h5>Sorry, there is no available scheduled service right now</h5>
+				<%
+					} else {
+				%>
 				<h5><%=predictOne.getRouteId()%>
 					<%=predictOne.getDirection()%>
 					|
@@ -99,10 +103,11 @@
 		</div>
 		<hr>
 		<%
-			
-		List<Prediction> predictAll = new ArrayList<Prediction>();
-		if (request.getAttribute("predictAll") != null) {
-		predictAll = (List<Prediction>) request.getAttribute("predictAll");
+		} 
+							
+		List<Prediction> predictAll = (List<Prediction>) request.getAttribute("predictAll");
+		System.err.println("predictAll == null? " + (predictAll == null));
+		if (predictAll != null || predictAll.size() != 0) {
 		%>
 
 		<div class="row" align="center">
@@ -117,20 +122,18 @@
 					<tbody>
 						<%
 							for (Prediction predict : predictAll) {
-								double lat = predict.getLat();
-								double lon = predict.getLon();
+							double lat = predict.getLat();
+							double lon = predict.getLon();
 						%>
 						<tr>
 							<td><%=predict.getRouteId()%></td>
 							<td><%=predict.getDirection()%></td>
 							<td><font color="#FF0000"><%=predict.getWaitTime()%></font>
 								Minutes</td>
-							<td>(<%=predict.getPredictTime()%>)
-							</td>
+							<td><%=predict.getPredictTime()%></td>
 						</tr>
 						<%
 							}
-						}
 						%>
 
 					</tbody>
@@ -141,13 +144,16 @@
 
 		<hr>
 		<!-- Google Map (Real Time Tracker) -->
-		
-		<div id="map-canvas"
-					style="height: 400px"></div>
-			
+
+		<div id="map-canvas" style="height: 400px"></div>
+
 		<!-- /.Google Map -->
-		
-		<br><br>
+
+		<%
+			}
+		%>
+
+		<br> <br>
 
 		<!-- Buttons -->
 		<div class="row" align="center">
@@ -201,9 +207,8 @@
 
       // Try HTML5 geolocation
       // set current location
-      <% Double stopLat = (Double) request.getAttribute("stopLat");
-         Double stopLon = (Double) request.getAttribute("stopLon");
-      %>
+      <%Double stopLat = (Double) request.getAttribute("stopLat");
+         Double stopLon = (Double) request.getAttribute("stopLon");%>
       if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = new google.maps.LatLng(position.coords.latitude,
@@ -232,15 +237,13 @@
               icon: stopIcon
           });
           
-        }, function() {
-          handleNoGeolocation(true);
         });
       } else {
         // Browser doesn't support Geolocation
         handleNoGeolocation(false);
       }
       
-      <% for(int i = 0; i < predictAll.size(); i++) {
+      <%for(int i = 0; i < predictAll.size(); i++) {
     	String busNumber = predictAll.get(i).getBusNumber();
       	String routeId = predictAll.get(i).getRouteId();
       	double lat = predictAll.get(i).getLat();
@@ -259,22 +262,21 @@
       	var myLat = <%=lat%>;
       	var myLon = <%=lon%>;
       	var myId = '<%=routeId%>';
-		var myLatlng = new google.maps.LatLng(myLat, myLon);
-		console.log("myLatlng = " + myLatlng);
-		var marker = new google.maps.Marker({
-		position : myLatlng,
-		title : myId,
-		icon : image
-		});
-		console.log("marker = " + marker);
-		// To add the marker to the map, call setMap();
-		marker.setMap(map);
 		
-		updateMarker(marker, myBusNumber, myLat, myLon);
-		
+			var myLatlng = new google.maps.LatLng(myLat, myLon);
+			console.log("myLatlng = " + myLatlng);
+			var marker = new google.maps.Marker({
+				position : myLatlng,
+				title : myId,
+				icon : image
+			});
+			console.log("marker = " + marker);
+			// To add the marker to the map, call setMap();
+			marker.setMap(map);
+
+			updateMarker(marker, myBusNumber, myLat, myLon);
 	<%}%>
 		}
-
 
 		function handleNoGeolocation(errorFlag) {
 			if (errorFlag) {
@@ -294,65 +296,67 @@
 		}
 
 		google.maps.event.addDomListener(window, 'load', initialize);
-		
+
 		// for ajax to get new location of each bus
 		function updateMarker() {
 			var marker = arguments[0];
 			var busNumber = arguments[1];
-			 
-			setInterval(function(){ requestAjax(marker, busNumber); }, 1000);
-			
+
+			setInterval(function() {
+				requestAjax(marker, busNumber);
+			}, 1000);
+
 		}
-		
+
 		function requestAjax() {
-			var loc = new Array(); 
+			var loc = new Array();
 			var marker = arguments[0];
 			var busNumber = arguments[1];
 			dataString = "busNumber=" + busNumber;
 			console.log("dataString = " + dataString);
-			
-			$.ajax({
-				type: 'POST',
-	            async: false,
-	            url: 'track.do',
-	            data: dataString,
-	            dataType: "json", 
-	            
-	         // If successfully get the response json
-	            success: function(data) {
-	            	console.log("successfully get response! " + data);
-	            	
-	            	loc[0] = data.lat;
-	            	console.log("newLat = " + loc[0]);
-	            	loc[1] = data.lon;
-	            	console.log("newLon = " + loc[1]);
-	            },
-	            
-	            //If there was no response from the server
-	            error: function(data, status, er) {
-	                 alert("error: " + data +" status: " + status +" er:" + er);
-	            },
-	            
-	            //capture the request before it was sent to server
-	            beforeSend: function(jqXHR, settings) {
-	                //adding some Dummy data to the request
-	                settings.data += "&dummyData=whatever";
-	                console.log("before send");
-	            },
-	            
-	            //this is called after the response or error functions are finished
-	            //so that we can take some action
-	            complete: function(jqXHR, textStatus) {
-	                //enable the button 
-	            	console.log("complete");
-	            }
-			});
-			
+
+			$
+					.ajax({
+						type : 'POST',
+						async : false,
+						url : 'track.do',
+						data : dataString,
+						dataType : "json",
+
+						// If successfully get the response json
+						success : function(data) {
+							console.log("successfully get response! " + data);
+
+							loc[0] = data.lat;
+							console.log("newLat = " + loc[0]);
+							loc[1] = data.lon;
+							console.log("newLon = " + loc[1]);
+						},
+
+						//If there was no response from the server
+						error : function(data, status, er) {
+							alert("error: " + data + " status: " + status
+									+ " er:" + er);
+						},
+
+						//capture the request before it was sent to server
+						beforeSend : function(jqXHR, settings) {
+							//adding some Dummy data to the request
+							settings.data += "&dummyData=whatever";
+							console.log("before send");
+						},
+
+						//this is called after the response or error functions are finished
+						//so that we can take some action
+						complete : function(jqXHR, textStatus) {
+							//enable the button 
+							console.log("complete");
+						}
+					});
+
 			var position = new google.maps.LatLng(loc[0], loc[1]);
-	        marker.setPosition(position);
+			marker.setPosition(position);
 		}
-		
-		
 	</script>
 	<!-- /.Google Map JavaScript -->
 

@@ -18,12 +18,6 @@
 <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"
 	type="text/css">
 
-<!-- Custom CSS -->
-<link href="css/index.css" rel="stylesheet">
-
-<!-- Auto Complete -->
-<script src="js/index.js"></script>
-
 <!-- JQuery Mobile -->
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -31,6 +25,13 @@
 <!-- Ajax JavaScript -->
 <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="js/ajax.js"></script>
+
+<!-- Custom CSS -->
+<link href="css/index.css" rel="stylesheet">
+
+<!-- Auto Complete -->
+<script src="js/index.js"></script>
+<script src="js/jquery.js"></script>
 
 <!--autocomplete -->
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,13 +56,13 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">Port Authority</a>
+				<a class="navbar-brand" href="index.jsp">PAAC</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="active"><a href="index.html">Waiting Time</a></li>
+					<li class="active"><a href="index.jsp">Waiting Time</a></li>
 					<li><a href="services.html">Plan a Trip</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">More<b class="caret"></b></a>
@@ -213,7 +214,7 @@
 							<!-- <div class="btn-group" data-toggle="buttons"> -->
 								<input type="button"
 									name="direction" id="inbound" 
-									value="INBOUND" class="btn btn-warning"> 
+									value="INBOUND" class="btn btn-warning" style="hover:"> 
 								<input type="button"
 									name="direction" id="outbound" 
 									value="OUTBOUND" class="btn btn-info">
@@ -323,20 +324,10 @@
 				$('input#direction1').val($('input#inbound').val());
 				$('form#form2').submit();
 			});
-
+		
 		});
+	
 	</script>
 
-	<!-- Submit additional JavaScript -->
-	<!-- 	<script type="text/javascript">
-		$('#inbound').click(function() {
-			$(this).toggleClass("active");
-			$("#direction").val("INBOUND");
-		});
-		$('#outbound').click(function() {
-			$(this).toggleClass("active");
-			$("#direction").val("OUTBOUND");
-		});
-	</script> -->
 </body>
 </html>

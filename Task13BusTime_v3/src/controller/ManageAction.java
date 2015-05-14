@@ -216,6 +216,7 @@ public class ManageAction extends Action {
 		System.out.println(results.toString());
 		JSONArray times = (JSONArray) results.get("prd");
 		System.out.println("Times is null: " + (times == null));
+		if (times == null) return null;
 		JSONObject time = (JSONObject) times.get(0);
 		String[] prediction = new String[2];
 		String direction = ((String) time.get("rtdir")).trim();
@@ -223,8 +224,7 @@ public class ManageAction extends Action {
 		String waitTime = "";
 		// TODO: if there's no match here, modify the error message
 		if (!dir.equals(direction)) {
-			waitTime = "0";
-			predictTime = "Not available";
+			return null;
 		} else {
 			prediction[0] = ((String) time.get("tmstmp")).trim();
 			prediction[1] = ((String) time.get("prdtm")).trim();
