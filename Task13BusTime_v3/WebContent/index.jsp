@@ -67,7 +67,6 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">More<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="index.html">Test Auto</a></li>
 							<li><a href="download.html">Download App</a></li>
 							<li><a href="privacy.html">Privacy Statement</a></li>
 						</ul></li>
@@ -78,15 +77,14 @@
 		<!-- /.container -->
 	</nav>
 
-
-
 	<!-- Page Content -->
 	<div class="container">
 		<!-- Page Heading-->
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					Waiting Time <small> at Bus Stop</small>
+					Waiting Time <br>
+					<small> At one bus stop</small>
 				</h1>
 			</div>
 		</div>
@@ -249,6 +247,7 @@
 								<option value="" disabled selected>Please select bus stop, ex: Centre Ave and 5th</option>
 								
 							</select>
+
 						</div>
 					</div>
 				</div>

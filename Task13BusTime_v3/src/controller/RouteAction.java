@@ -244,7 +244,7 @@ public class RouteAction extends Action {
         try {
             HttpURLConnection connection = null;
             URL url = new URL(
-                    "http://truetime.portauthority.org/bustime/api/v2/getpredictions?key=ADpCvpyDcupACyuMdk5wrVTVH&format=json&rt="
+                    "http://truetime.portauthority.org/bustime/api/v2/getpredictions?key=w9m3MfMkLEEwU7hqyGM6mU9ut&format=json&rt="
                             + URLEncoder.encode(routeName, "UTF-8")
                             + "&vid="
                             + vid);
@@ -290,7 +290,7 @@ public class RouteAction extends Action {
         URL url;
         try {
             url = new URL(
-                    "http://truetime.portauthority.org/bustime/api/v2/getpredictions?key=ADpCvpyDcupACyuMdk5wrVTVH&format=json&rt="
+                    "http://truetime.portauthority.org/bustime/api/v2/getpredictions?key=w9m3MfMkLEEwU7hqyGM6mU9ut&format=json&rt="
                             + URLEncoder.encode(routeName, "UTF-8")
                             + "&stpid="
                             + stopId);
@@ -337,7 +337,7 @@ public class RouteAction extends Action {
             throws IOException, RollbackException {
         HttpURLConnection connection = null;
         URL url = new URL(
-                "http://truetime.portauthority.org/bustime/api/v2/getdirections?key=ADpCvpyDcupACyuMdk5wrVTVH&format=json&rt="
+                "http://truetime.portauthority.org/bustime/api/v2/getdirections?key=w9m3MfMkLEEwU7hqyGM6mU9ut&format=json&rt="
                         + URLEncoder.encode(routeName, "UTF-8"));
 
         connection = (HttpURLConnection) url.openConnection();
@@ -364,7 +364,7 @@ public class RouteAction extends Action {
             throws IOException, RollbackException {
         HttpURLConnection connection = null;
         URL url = new URL(
-                "http://truetime.portauthority.org/bustime/api/v2/getstops?key=ADpCvpyDcupACyuMdk5wrVTVH&format=json&rt="
+                "http://truetime.portauthority.org/bustime/api/v2/getstops?key=w9m3MfMkLEEwU7hqyGM6mU9ut&format=json&rt="
                         + URLEncoder.encode(routeName, "UTF-8")
                         + "&dir="
                         + URLEncoder.encode(dirName, "UTF-8"));

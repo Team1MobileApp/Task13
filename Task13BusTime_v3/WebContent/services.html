@@ -31,9 +31,22 @@
 	var curAddr = null;
 	var x;
 	var y;
+
+	function setCookie() {
+		if (typeof (Storage) != "undefined") {
+			localStorage.setItem("des",
+					document.getElementById("destination").value);
+		} else {
+			document.getElementById("destination").innerHTML = "Sorry, your browser does not support Web Storage...";
+		}
+
+	}
+
 	function init() {
 		x = document.getElementById("origin");
 		y = document.getElementById("destination");
+		y.onchange = setCookie;
+		document.getElementById("destination").value = localStorage.getItem("des");
 		var now = new Date();
 		var hour = now.getHours();
 		hour = hour + "";
@@ -138,7 +151,7 @@
 	</nav>
 
 	<!-- Page Content -->
-	<div class="container">
+	<div class="container" style="width: 380px">
 
 		<!-- Page Heading-->
 		<div class="row">
@@ -156,13 +169,13 @@
 				<form method="get" name="trip planner" id="trip">
 					<div class="control-group form-group">
 						<div class="controls">
-							<table cellspacing="30px">
+							<table style="cellspacing: 30px">
 								<tr>
 									<td style="padding: 10px"><img class="img-circle"
 										src="img/departure.png" width="50px" height="50px" /></td>
 									<td style="padding: 10px"><input type="text"
 										class="form-control input-lg" id="origin"
-										value="Current Location" required
+										value="Current Location" style="width: 250px; color: #359035" required
 										data-validation-required-message="Please enter origin">
 									</td>
 								</tr>
@@ -173,7 +186,7 @@
 
 									<td style="padding: 10px"><input type="text"
 										class="form-control input-lg" id="destination"
-										placeholder="Enter an address" required
+										placeholder="Enter an address" style="width: 250px" required
 										data-validation-required-message="Please enter destination"></td>
 								</tr>
 							</table>
@@ -181,12 +194,12 @@
 							<p id="demo"></p>
 
 							<br>
-							<div class="container col-xs-10 col-sm-8-offset-2 col-md-6" >
-								<button type="button" class="btn btn-default"
+							<div class="col-xs-10 col-sm-8-offset-2 col-md-6">
+								<button type="button" class="btn btn-warning"
 									data-toggle="collapse" data-target="#times">More
 									Options >></button>
 								<div id="times" class="collapse">
-									<br> By default the system will plan a trip to leave now.<br>
+									<br> By default, it will plan a trip to leave now.<br>
 									<br>
 									<div class="col-sm-4">
 										<div class="btn-group" role="group" aria-label="...">
@@ -204,17 +217,19 @@
 									</div>
 								</div>
 							</div>
-							<br />
-							<br />
-							<br />
-							
+							<br> <br>
+
 							<div id="success"></div>
 							<!-- For success/fail messages -->
-							<div style="margin-left:20px">
-								<button type="button" class="btn btn-primary btn-lg"
-									 onclick="javascript:updateAddr();">Find
-									Routes</button>
+							<div class="col-xs-10 col-sm-8-offset-2 col-md-6">
+								<div style="display: block">
+									<button type="button" class="btn btn-primary btn-lg"
+										onclick="javascript:updateAddr();">Find Routes</button>
+								</div>
 							</div>
+						</div>
+					</div>
+
 				</form>
 			</div>
 		</div>

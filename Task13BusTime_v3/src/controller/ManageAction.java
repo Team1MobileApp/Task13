@@ -28,7 +28,7 @@ import databeans.Stop;
 public class ManageAction extends Action {
 
 	private StopDAO stopDAO;
-	private static String apiKey = "ADpCvpyDcupACyuMdk5wrVTVH";
+	private static String apiKey = "w9m3MfMkLEEwU7hqyGM6mU9ut";
 
 
 	public ManageAction(Model model) {
@@ -127,7 +127,9 @@ public class ManageAction extends Action {
 		System.out.println(results.toString());
 
 		JSONArray times = (JSONArray) results.get("prd");
-		System.out.println("Times is null: " + (times == null));
+		
+		if (times == null) return null;
+		
 		JSONObject[] allTime = new JSONObject[times.size()];
 		for (int i = 0; i < times.size(); i++) {
 			allTime[i] = (JSONObject) times.get(i);

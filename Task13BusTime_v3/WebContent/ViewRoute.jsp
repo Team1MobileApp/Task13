@@ -120,9 +120,6 @@ body {
       }
     function showRoute(id)
     {
-        //for ( i = 0; i<polylines.length; i++)
-        //  polylines[i].setMap(null);
-        //polylines[id].setMap(map);
         initMap();
       directionsDisplay.setRouteIndex(id);
     }
@@ -130,6 +127,8 @@ body {
 </head>
 
 <body onload="initialize()">
+
+<div class="containder">
   <!-- Navigation -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -141,13 +140,13 @@ body {
             class="icon-bar"></span> <span class="icon-bar"></span> <span
             class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">PortAuthority</a>
+        <a class="navbar-brand" href="index.jsp">PAAC</a>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse"
         id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="index.html">Waiting Time</a></li>
+          <li><a href="index.jsp">Waiting Time</a></li>
           <li class="active"><a href="services.html">Trip Planner</a></li>
           <li class="dropdown"><a href="#" class="dropdown-toggle"
             data-toggle="dropdown">More<b class="caret"></b></a>
@@ -165,12 +164,28 @@ body {
   <br />
   <br />
   <br />
+  
+  		<!-- Buttons -->
+		<div class="row" align="center">
+			<div class="col-lg-12">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-success"
+						onClick="window.location.reload();">Refresh</button>
+					<button type="button" class="btn btn-danger"
+						onClick="window.location.href='services.html'">Go Back</button>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+		
+  <br />
+  
   <!-- Page Heading-->
   <div class="row" style="margin-up: 150px;height:100%">
     <div class="col-lg-8, col-md-offset-2" style="height:100%">
       <table style="height: 100%; width: 100%; margin-left: 20px">
         <tr style="height: 100%">
-          <td width="100%" style="height:100%;vertical-align:top">
+          <td width="380px" style="height:100%;vertical-align:top">
           <div class="list-group">
             <% List<RouteEstimation> estimations = (List<RouteEstimation>)session.getAttribute("Estimations"); %>
             <% for (int i = 0; i < routes.size(); i++) { %>
@@ -197,12 +212,25 @@ body {
                         %>
             </h4> <%} %>
             </div>
-            <div id="map_canvas" style="width: 100%; height: 100%"></div>
+            <div id="map_canvas" style="width: 100%; height: 400px"></div>
           </td>
         </tr>
       </table>
 
     </div>
+    </div>
+    <hr>
+		<!-- Footer -->
+		<footer>
+			<div class="row">
+				<div align="center">
+					<p>
+						<font size="-1">Copyright 2015 &copy; Port Authority of
+							Allegheny County</font>
+					</p>
+				</div>
+			</div>
+		</footer>
   </div>
   <!-- jQuery -->
   <script src="js/jquery.js"></script>

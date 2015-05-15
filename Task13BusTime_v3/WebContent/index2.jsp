@@ -45,7 +45,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">PAAC </a>
+				<a class="navbar-brand" href="index.jsp">PAAC</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
@@ -75,8 +75,7 @@
 					<%
 						String stopName = (String) request.getAttribute("stopName");
 					%>
-					Waiting Time <br>
-					<small> at Bus Stop <%=stopName%></small>
+					Waiting Time <br> <small> at Bus Stop <%=stopName%></small>
 
 				</h2>
 			</div>
@@ -86,30 +85,42 @@
 			<div class="col-lg-12">
 				<%
 					String routeOne = (String) request.getAttribute("routeId");
-					Prediction predictOne = (Prediction) request.getAttribute("predictOne");
-									if (predictOne == null) {
+							Prediction predictOne = (Prediction) request.getAttribute("predictOne");
+											if (predictOne == null) {
 				%>
-				<h5>Sorry, No scheduled service within 30 minutes for <%=routeOne%></h5>
+				<h4 style="color: red">
+					Sorry, No scheduled service within 30 minutes for
+					<%=routeOne%></h4>
 				<%
 					} else {
 				%>
-				<h5><%=predictOne.getRouteId()%>
+				<h4><%=predictOne.getRouteId()%>
 					<%=predictOne.getDirection()%>
 					|
 					<%=predictOne.getRouteName()%>
 					in <b><font color="#FF0000"><%=predictOne.getWaitTime()%></font>
 						minutes (ETA <%=predictOne.getPredictTime()%>) </b>
-				</h5>
+				</h4>
 			</div>
 		</div>
 		<hr>
+		
+		
 		<%
-		} 
+			} 
 							
-		List<Prediction> predictAll = (List<Prediction>) request.getAttribute("predictAll");
-		System.err.println("predictAll == null? " + (predictAll == null));
-		if (predictAll != null || predictAll.size() != 0) {
-		%>
+				List<Prediction> predictAll = (List<Prediction>) request.getAttribute("predictAll");
+				
+				if (predictAll == null) {
+					%>
+			<div class="row" align="center">
+				<div class="col-lg-12">
+				<h4 style="color: red">Sorry, No scheduled service within 30 minutes for all routes.</h4>
+				</div>
+			</div>
+					<% 
+				} else {
+			%>
 
 		<div class="row" align="center">
 			<div class="col-lg-12">
@@ -123,6 +134,7 @@
 					<tbody>
 						<%
 							for (Prediction predict : predictAll) {
+								
 							double lat = predict.getLat();
 							double lon = predict.getLon();
 						%>
@@ -146,7 +158,17 @@
 		<hr>
 		<!-- Google Map (Real Time Tracker) -->
 
-		<div id="map-canvas" style="height: 400px"></div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a class="accordion-toggle" data-toggle="collapse"
+						data-parent="#accordion" href="#collapseOne">Show Map</a>
+				</h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse">
+				<div id="map-canvas" style="height: 600px; width: 100%"></div>
+			</div>
+		</div>
 
 		<!-- /.Google Map -->
 
@@ -162,7 +184,7 @@
 				<div class="btn-group" role="group" aria-label="...">
 					<button type="button" class="btn btn-success"
 						onClick="window.location.reload();">Refresh</button>
-					<button type="button" class="btn btn-primary"
+					<button type="button" class="btn btn-danger"
 						onClick="window.location.href='index.jsp'">Go Back</button>
 				</div>
 			</div>
@@ -196,8 +218,9 @@
 	<script
 		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&language=en"></script>
 	<script>
-    
+	
     var map;
+   
     function initialize() {
       var mapOptions = {
         zoom: 15,
@@ -244,7 +267,9 @@
         handleNoGeolocation(false);
       }
       
-      <%for(int i = 0; i < predictAll.size(); i++) {
+      <%
+      if (predictAll != null) {
+      for(int i = 0; i < predictAll.size(); i++) {
     	String busNumber = predictAll.get(i).getBusNumber();
       	String routeId = predictAll.get(i).getRouteId();
       	double lat = predictAll.get(i).getLat();
@@ -263,7 +288,7 @@
       	var myLat = <%=lat%>;
       	var myLon = <%=lon%>;
       	var myId = '<%=routeId%>';
-		
+
 			var myLatlng = new google.maps.LatLng(myLat, myLon);
 			console.log("myLatlng = " + myLatlng);
 			var marker = new google.maps.Marker({
@@ -276,7 +301,10 @@
 			marker.setMap(map);
 
 			updateMarker(marker, myBusNumber, myLat, myLon);
-	<%}%>
+	<%}
+    }
+      
+	%>
 		}
 
 		function handleNoGeolocation(errorFlag) {
@@ -296,8 +324,14 @@
 			map.setCenter(options.position);
 		}
 
-		google.maps.event.addDomListener(window, 'load', initialize);
-
+	    $('a[href="#collapseOne"]').click(function(){
+			console.log("click a href");
+			$('#map-canvas').css({"width": "100%", "height": "600px"});
+			/* google.maps.event.trigger(map, "resize"); */
+			initialize();
+		});
+	    /* google.maps.event.addDomListener(window, 'load', initialize);  */
+		
 		// for ajax to get new location of each bus
 		function updateMarker() {
 			var marker = arguments[0];

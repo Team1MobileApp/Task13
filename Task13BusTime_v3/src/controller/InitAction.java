@@ -27,7 +27,7 @@ import databeans.Stop;
 public class InitAction extends Action {
 
 	private StopDAO stopDAO;
-	private static String apiKey = "DDfUaKJD2s9z2PXP5rJnBejEW";
+	private static String apiKey = "w9m3MfMkLEEwU7hqyGM6mU9ut";
 
 	public InitAction(Model model) {
 		stopDAO = model.getStopDAO();
