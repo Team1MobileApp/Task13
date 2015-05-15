@@ -46,6 +46,7 @@ public class ManageAction extends Action {
 				" ");
 		String routeId = route[0];
 		System.err.println("routeId = " + routeId);
+		request.setAttribute("routeId", routeId);
 
 		// get direction
 		String direction = (String) request.getParameter("direction");

@@ -85,10 +85,11 @@
 		<div class="row" align="center">
 			<div class="col-lg-12">
 				<%
+					String routeOne = (String) request.getAttribute("routeId");
 					Prediction predictOne = (Prediction) request.getAttribute("predictOne");
 									if (predictOne == null) {
 				%>
-				<h5>Sorry, there is no available scheduled service right now</h5>
+				<h5>Sorry, No scheduled service within 30 minutes for <%=routeOne%></h5>
 				<%
 					} else {
 				%>
@@ -222,8 +223,7 @@
               animation: google.maps.Animation.DROP,
           });
 
-          map.setCenter(pos);
-          
+         
           var stopLat = <%=stopLat%>;
           var stopLon = <%=stopLon%>;
           var stopPos = new google.maps.LatLng(stopLat,stopLon);
@@ -236,6 +236,7 @@
               animation: google.maps.Animation.DROP,
               icon: stopIcon
           });
+          map.setCenter(stopPos);
           
         });
       } else {

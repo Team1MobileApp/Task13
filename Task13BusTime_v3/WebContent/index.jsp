@@ -19,8 +19,8 @@
 	type="text/css">
 
 <!-- JQuery Mobile -->
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
 
 <!-- Ajax JavaScript -->
 <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
@@ -67,7 +67,7 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">More<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-
+							<li><a href="index.html">Test Auto</a></li>
 							<li><a href="download.html">Download App</a></li>
 							<li><a href="privacy.html">Privacy Statement</a></li>
 						</ul></li>
